@@ -1,0 +1,13 @@
+.content {
+	clear: both;
+	margin-top: 5px;
+}
+
+#info{
+	background-color: lightgray;
+	padding: 10px;
+}
+
+#menu{
+	margin-bottom: 15px;
+}
