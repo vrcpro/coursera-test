@@ -13,7 +13,7 @@
     
     function ToBuyController(ShoppingListCheckOffService){
         var toBuy = this;
-
+        toBuy.name = "Ray";
         toBuy.items = ShoppingListCheckOffService.getItems();
     //    toBuy.moveToBought = ShoppingListCheckOffService.moveToBought(itemIndex);
         toBuy.removeItem = function (itemIndex){
