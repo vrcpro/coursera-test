@@ -22,8 +22,7 @@
       }
     </style>
   </head>
-  <script src="styles/angular.min.js"></script>
-  <script src="app.js"></script>
+
 <body>
   <div class="container">
   <h1>Narrow It Down App</h1>
@@ -41,11 +40,13 @@
       <br>
       <br>
       <h3>Results:</h3>
-      <found-items></found-items>
+      <found-items found-items="toBuy.list" on-remove="toBuy.removeMenuItem(index)"></found-items>
+
     </div>
     </div>
   </div>
 </div>
-
+<script src="styles/angular.min.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

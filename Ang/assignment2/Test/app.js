@@ -10,7 +10,7 @@
         var ddo = {
           templateUrl: 'items.html',
           scope: {
-            items: '<',
+            foundItems: '<',
             onRemove: '&'
           },
           controller: NarrowItDownController,
@@ -25,19 +25,15 @@
     
     function NarrowItDownController(MenuSearchService){
         var toBuy = this;
-        
+        toBuy.list = [];
         toBuy.search = '';
         toBuy.menuItems = function(searchTerm) {
             var promise = MenuSearchService.getMatchedMenuItems(searchTerm);
-            console.log("entered this function");
+            
             promise.then(function(items) {
-                if (items > 0) {
-                    toBuy.message = '';
-                    toBuy.foundItems = items;
-                } else {
-                    toBuy.message = 'Nothing found!';
-                    toBuy.foundItems = [];
-                }
+                console.log(items);
+                toBuy.list = items;
+               //  console.log(items[0]);
             });
         };
 
@@ -53,10 +49,31 @@
                 url: ("https://coursera-jhu-default-rtdb.firebaseio.com/menu_items.json")
             }).then(function(response) {
                 var foundItems = [];
+                
+                
+                
+                //    console.log(response);
+                var cats = ['A','B','C','CM','CU','D','DK','DS','F','FR','FY','L','NF','NL','PF','SO','SP','SR','V','VG'];
+
+                for(var t = 0; t < cats.length; t++){
+                  //  console.log(response.data['A']['menu_items']);
+                    for (var i in response.data[cats[t]]['menu_items']){
+                        var listing = response.data[cats[t]]['menu_items'][i]['description'];       
+                       // console.log(listing);
+                        if(listing.includes(searchTerm)){
+                            foundItems.push(listing);
+                        }
+                    }
+                }
+                        
+                        
+                if(searchTerm == '' || foundItems.length == 0){
+                    return "Nothing Found";
+                } else {       
                     
                 
-                console.log(foundItems);
                 return foundItems;
+                }
             });
 
         }
