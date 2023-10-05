@@ -1,77 +1,85 @@
-( function (){
+(function (){
+    'use strict';
 
     angular.module('NarrowItDownApp', [])
     .controller('NarrowItDownController', NarrowItDownController)
     .service('MenuSearchService', MenuSearchService)
     .directive('foundItems', foundItems);
- 
+
     function foundItems() {
         var ddo = {
-          templateUrl: 'foundItems.html',
+          templateUrl: 'items.html',
           scope: {
+            foundItems: '<',
             onRemove: '&'
           },
-          controller: FoundItemsDirectiveController,
-          controllerAs: 'list',
+          controller: NarrowItDownController,
+          controllerAs: 'toBuy',
           bindToController: true
         };
       
         return ddo;
       }
 
-      function FoundItemsDirectiveController() {
-        var list = this;
-      
-        list.cookiesInList = function () {
-          for (var i = 0; i < list.items.length; i++) {
-            var name = list.items[i].name;
-            if (name.toLowerCase().indexOf("cookie") !== -1) {
-              return true;
-            }
-          }
-      
-          return false;
+    NarrowItDownController.$inject = ['MenuSearchService'];
+    
+    function NarrowItDownController(MenuSearchService){
+        var toBuy = this;
+        toBuy.list = [];
+        toBuy.search = '';
+        toBuy.menuItems = function(searchTerm) {
+            var promise = MenuSearchService.getMatchedMenuItems(searchTerm);
+            
+            promise.then(function(items) {
+                console.log(items);
+                toBuy.list = items;
+               //  console.log(items[0]);
+            });
         };
-      }
 
+    }
+    MenuSearchService.$inject = ['$http'];
+    function MenuSearchService($http){
+        var service = this;
+        
+        service.getMatchedMenuItems = function (searchTerm){
 
+            return $http({
+                method: "GET",
+                url: ("https://coursera-jhu-default-rtdb.firebaseio.com/menu_items.json")
+            }).then(function(response) {
+                var foundItems = [];
+                
+                
+                
+                //    console.log(response);
+                var cats = ['A','B','C','CM','CU','D','DK','DS','F','FR','FY','L','NF','NL','PF','SO','SP','SR','V','VG'];
 
-
-MenuSearchService.$inject = ['$http'];
-function MenuSearchService($http){
-    var service = this;
-
-    service.getMatchedMenuItems = function (searchTerm){
-        console.log("This is search functino");
-        var response = $http({
-            url: "https://coursera-jhu-default-rtdb.firebaseio.com/menu_items.json"
-        }).then(function (result) {
-            // process result and only keep items that match
-            
-            for( var i = 0; i < result.length; i++){
-                if (result[i] == searchTerm){
-                    foundItems.push(result[i]);
+                for(var t = 0; t < cats.length; t++){
+                  //  console.log(response.data['A']['menu_items']);
+                    for (var i in response.data[cats[t]]['menu_items']){
+                        var listing = response.data[cats[t]]['menu_items'][i]['description'];       
+                       // console.log(listing);
+                        if(listing.includes(searchTerm)){
+                            foundItems.push(listing);
+                        }
+                    }
                 }
-            }
-            
-            var foundItems = [];
-            console.log(foundItems);
-            // return processed items
-            return foundItems;
-        });
-        return response;
+                        
+                        
+                if(searchTerm == '' || foundItems.length == 0){
+                    return "Nothing Found";
+                } else {       
+                    
+                
+                return foundItems;
+                }
+            });
+
+        }
     }
 
-}
-    
-NarrowItDownController.$inject = ['MenuSearchService'];    
-function NarrowItDownController (){
-    var narrowIt = this;
 
-    narrowIt.name = "ray";
-    narrowIt.found = MenuSearchService.getMatchedMenuItems();
-
-}
 
 
 })();
