@@ -7,19 +7,20 @@
 
     function RoutesConfig($stateProvider, $urlRouterProvider){
 
-        $urlRouterProvider.otherwise('/tab');
-
+        $urlRouterProvider.otherwise('/');
         $stateProvider
         ,state('home',{
             url:'/',
-            templateUrl: 'home.html'
+            templateUrl: '/home.html'
         })
         .state('categories',{
             url: '/catergories',
             templateUrl: '/categories.html',
             controller: 'catCtrl as catCtrl',
             resolve: {
-                categories:['hi']
+                categories:['MenuDataService', function(MenuDataService){
+                    return MenuDataService.getAllCategories();
+                }]
             }
         });
 
