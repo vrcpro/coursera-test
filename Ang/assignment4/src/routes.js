@@ -27,18 +27,14 @@ function RoutesConfig($stateProvider, $urlRouterProvider) {
 
     })
     .state('items', {
-      url: '/cats/{categoryShortName}',
+      url: '/{categoryShortName}',
       templateUrl: 'src/items.html',
       controller: 'itemsController as itemsController',
       params: {
         categoryShortName: null,
         categoryName: null
       },
-      resolve: {
-        items:['$stateParams', 'MenuDataService', function($stateParams, MenuDataService){
-          return MenuDataService.getItemsForCategory($stateParams.categoryShortName);
-        }]
-      }
+      resolve:{items:['$stateParams', 'MenuDataService', function($stateParams, MenuDataService){return MenuDataService.getItemsForCategory($stateParams.categoryShortName);}]}
     });
   }
 })();

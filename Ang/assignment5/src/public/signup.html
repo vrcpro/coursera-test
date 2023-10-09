@@ -1,0 +1,19 @@
+<h1 style="text-align: center;">Sign Up</h1>
+
+<div class="container">
+
+
+<form style="text-align: center; color: black;" name="SignUp" novalidate>
+<br>
+<input type="text" placeholder="First Name" name="firstName" required min-length="3" ng-model="signUpController.user.firstName"><span ng-if="SignUp.firstName.$error.required && SignUp.firstName.$touched">Name is Required.</span><br><br>
+<input type="text" placeholder="Last Name" name="lastName" required min-length="3" ng-model="signUpController.user.lastName"><span ng-if="SignUp.lastName.$error.required && SignUp.lastName.$touched">Name is Required.</span><br><br>
+<input type="email" name="email" required placeholder="email" ng-model="signUpController.user.email"><span ng-if="signUpController.email.$invalid && signUpController.email.$touched">Must be a valid Email</span><br><br>
+<input type="text" placeholder="Phone Number" name="phone" pattern="(\d{3})-(\d{3})-(\d{4})" ng-model="signUpController.user.phone"><span ng-if="signUpController.phone.$invalid && signUpController.phone.$touched">Not proper format</span><br><br>
+<input type="text" placeholder="Favorite Item" name="item" ng-model="signUpController.user.favItem"><br><br>
+<button ng-disabled="SignUp.$invalid" ng-click="signUpController.submit()">Submit</button>
+
+</form>
+
+
+
+</div>
